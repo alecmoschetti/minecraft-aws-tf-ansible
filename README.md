@@ -26,3 +26,4 @@
 ## Sources Used
 
 - [Terraform AWS Guide](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-create) 
+- [How to Handle SSH Keys Securely in Terraform](https://oneuptime.com/blog/post/2026-02-23-how-to-handle-ssh-keys-securely-in-terraform/view)
