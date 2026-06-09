@@ -52,3 +52,42 @@
     group: "{{ minecraft_group }}"
     mode: "0755"
 
+# ***********************************************
+# Download the Minecraft server JAR
+# ***********************************************
+
+- name: Download Minecraft server JAR ({{ minecraft_version }})
+  ansible.builtin.get_url:
+    url: "{{ minecraft_jar_url }}"
+    dest: "{{ minecraft_dir }}/server.jar"
+    owner: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    mode: "0644"
+  tags: download
+
+# ***********************************************
+# Accept the EULA
+# ***********************************************
+
+- name: Accept Minecraft EULA
+  ansible.builtin.copy:
+    dest: "{{ minecraft_dir }}/eula.txt"
+    content: "eula=true\n"
+    owner: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    mode: "0644"
+  tags: eula
+
+# ***********************************************
+# Write server.properties to restart server
+# ***********************************************
+
+- name: Write server.properties
+  ansible.builtin.template:
+    src: server.properties.j2
+    dest: "{{ minecraft_dir }}/server.properties"
+    owner: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    mode: "0644"
+  tags: config
+
