@@ -1,0 +1,21 @@
+---
+# The main Ansible playbook that configures the EC2 instance as a Minecraft server.
+# This is run via run.sh:
+# Inventory is generated dynamically from Terraform output
+
+- name: Configure Minecraft Server
+  hosts: minecraft
+  become: true          # most tasks need root
+  gather_facts: true
+
+  vars:
+    minecraft_version: "1.21.4"
+    minecraft_jar_url: "https://piston-data.mojang.com/v1/objects/97ccd4c0ed3f81bbb7bfacddd1090b0c56f9bc51/server.jar"
+    minecraft_dir: "/opt/minecraft/server"
+    minecraft_user: "minecraft"
+    minecraft_group: "minecraft"
+    java_heap_min: "4G"
+    java_heap_max: "4G"
+
+  roles:
+    - minecraft
