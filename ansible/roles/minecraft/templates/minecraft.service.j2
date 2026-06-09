@@ -1,0 +1,42 @@
+# ***********************************************
+# Jinja Systemd Minecraft service
+# ***********************************************
+
+[Unit]
+Description=Minecraft Java Edition Server {{ minecraft_version }}
+Documentation=https://minecraft.net
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User={{ minecraft_user }}
+Group={{ minecraft_group }}
+WorkingDirectory={{ minecraft_dir }}
+
+# START ***********************************************
+ExecStart=/usr/bin/java \
+    -Xms{{ java_heap_min }} \
+    -Xmx{{ java_heap_max }} \
+    -XX:+UseG1GC \
+    -XX:+ParallelRefProcEnabled \
+    -XX:MaxGCPauseMillis=200 \
+    -jar {{ minecraft_dir }}/server.jar nogui
+
+# STOP ************************************************
+# SIGTERM triggers Minecraft's built-in graceful shutdown
+ExecStop=/bin/kill -SIGTERM $MAINPID
+
+# Give the server up to 60 s to finish saving before systemd kills it.
+TimeoutStopSec=60
+
+# RESTART POLICY **************************************
+Restart=on-failure
+RestartSec=10s
+
+# SECURITY HARDENING **********************************
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+# This makes the server auto-start on reboot
+WantedBy=multi-user.target

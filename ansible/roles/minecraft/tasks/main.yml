@@ -89,5 +89,46 @@
     owner: "{{ minecraft_user }}"
     group: "{{ minecraft_group }}"
     mode: "0644"
+  notify: Restart minecraft
   tags: config
 
+# ***********************************************
+# Install the systemd service unit
+# ***********************************************
+
+- name: Install minecraft systemd service
+  ansible.builtin.template:
+    src: minecraft.service.j2
+    dest: /etc/systemd/system/minecraft.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload systemd
+    - Restart minecraft
+  tags: service
+
+# ***********************************************
+# Enable and start the service
+# ***********************************************
+
+- name: Enable minecraft service to start on reboot
+  ansible.builtin.systemd:
+    name: minecraft
+    enabled: true
+    daemon_reload: true
+
+- name: Start minecraft service
+  ansible.builtin.systemd:
+    name: minecraft
+    state: started
+
+- name: Wait for Minecraft port 25565 to be open
+  ansible.builtin.wait_for:
+    port: 25565
+    host: "{{ ansible_host }}"
+    delay: 10
+    timeout: 120
+  delegate_to: localhost
+  become: false
+  tags: verify
