@@ -14,9 +14,9 @@ variable "aws_region" {
 }
 
 variable "instance_type" {
-  description = "t3.medium is recommended for minimum Minecraft server hardware requirements"
+  description = "t2.large is recommended for minimum Minecraft server hardware requirements"
   type = string
-  default = "t3.medium"
+  default = "t2.large"
 }
 
 variable "volume_size" {
