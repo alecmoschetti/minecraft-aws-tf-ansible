@@ -19,3 +19,6 @@ ansible/inventory.ini   # written at runtime by run.sh
 *.swo
 __pycache__/
 *.pyc
+
+# Screen recording for Final submission
+*.mov
