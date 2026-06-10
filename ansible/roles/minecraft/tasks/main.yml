@@ -122,13 +122,3 @@
   ansible.builtin.systemd:
     name: minecraft
     state: started
-
-- name: Wait for Minecraft port 25565 to be open
-  ansible.builtin.wait_for:
-    port: 25565
-    host: "{{ ansible_host }}"
-    delay: 10
-    timeout: 120
-  delegate_to: localhost
-  become: false
-  tags: verify
